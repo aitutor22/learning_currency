@@ -6,13 +6,15 @@ $(document).ready(function() {
 			type: "POST",
 			url: "/changecurrency",
 			data: {
-				number: 1,
-				price: 3000,
-				originalCurrency: "usd",
-				newCurrency: "sgd"
+				number: $("#numberBags")[0].value,
+				price: $("#price")[0].value,
+				originalCurrency: $("#originalCurrency")[0].value,
+				newCurrency: $("#newCurrency")[0].value
 			},
 			success: function(data){
-				console.log(data);
+				if (data.status == 200) {
+					alert("Total price is " + data.total_price)
+				}
 			}
 		})
 	});

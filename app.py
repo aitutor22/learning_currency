@@ -1,4 +1,5 @@
 # http://flask.pocoo.org/
+import flask
 from flask import Flask, jsonify, render_template
 import requests
 
@@ -16,7 +17,33 @@ def currency():
 
 @app.route("/changecurrency", methods=["POST"])
 def change_currency():
-	return "Hello"
+	originalCurrency = flask.request.form["originalCurrency"].upper()
+	newCurrency = flask.request.form["newCurrency"].upper()
+	numberBags = int(flask.request.form["number"])
+	price = float(flask.request.form["price"])
+
+	params = {
+		"base": originalCurrency
+	}
+
+	data = requests.get("http://api.fixer.io/latest", params=params).json()
+	currency_rates = data["rates"]
+	currency_rate_for_user = currency_rates[newCurrency]
+	total_price = numberBags * price * currency_rate_for_user
+	
+	results = {
+		"status": 200,
+		"total_price": total_price
+	}
+
+	return jsonify(results)
+
+	
+	
+	# currency_rate_for_user = 
+	# return currency_rates
+
 
 if __name__ == "__main__":
 	app.run()
+
